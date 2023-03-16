@@ -72,6 +72,7 @@ class _MainPageState extends State<MainPage> {
       body: Row(children: [
         Expanded(
             child: Container(
+                width: MediaQuery.of(context).size.height,
                 decoration: const BoxDecoration(
                     border: Border(
                         right: BorderSide(color: Colors.blueGrey, width: 0.5))),
