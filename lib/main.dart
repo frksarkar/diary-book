@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:diary_book/firebase_options.dart';
+import 'package:diary_book/ui/gettingStartedPage.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
@@ -19,12 +20,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Diary Book',
       theme: ThemeData(
         visualDensity: VisualDensity.adaptivePlatformDensity,
         primarySwatch: Colors.green,
       ),
-      home: const MainPage(),
+      home: const GettingStartedPage(),
     );
   }
 }
