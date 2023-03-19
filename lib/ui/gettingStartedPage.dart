@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'login_page.dart';
+
 class GettingStartedPage extends StatelessWidget {
   const GettingStartedPage({super.key});
 
@@ -32,10 +34,15 @@ class GettingStartedPage extends StatelessWidget {
                 style: TextStyle(fontSize: 20)),
             style: TextButton.styleFrom(
                 backgroundColor: Colors.amber.shade200,
-                padding: EdgeInsets.all(16.0)),
+                padding: const EdgeInsets.all(16.0)),
             onPressed: () {
               Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => GetLogin()));
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => LoginPage(
+                            emailController: TextEditingController(),
+                            passwordController: TextEditingController(),
+                          )));
             },
           )
         ]),

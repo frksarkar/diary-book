@@ -4,6 +4,7 @@ import 'package:diary_book/ui/gettingStartedPage.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
+import 'ui/login_page.dart';
 import 'ui/main_page.dart';
 
 void main() async {
@@ -26,7 +27,9 @@ class MyApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
         primarySwatch: Colors.green,
       ),
-      home: const GettingStartedPage(),
+      home: LoginPage(
+          emailController: TextEditingController(),
+          passwordController: TextEditingController()),
     );
   }
 }
