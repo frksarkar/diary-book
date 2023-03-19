@@ -36,36 +36,18 @@ class LoginPage extends StatelessWidget {
                                 fontSize: 25, fontWeight: FontWeight.bold)),
                         Padding(
                           padding: const EdgeInsets.all(18.0),
-                          child: TextFormField(
-                            controller: _emailTextController,
-                            decoration: InputDecoration(
-                                focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(12),
-                                    borderSide: BorderSide(
-                                        color: Theme.of(context).primaryColor)),
-                                enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(25),
-                                    borderSide: const BorderSide(
-                                        color: Colors.grey, width: 1.5)),
-                                label: const Text('Email'),
-                                hintText: 'jhon@exapled.com'),
+                          child: createInputField(
+                            context: context,
+                            hint: 'jhon@exapled.com',
+                            label: 'Email',
                           ),
                         ),
                         Padding(
                           padding: const EdgeInsets.only(
-                              left: 18.0, bottom: 18, right: 18),
-                          child: TextFormField(
-                            controller: _passwordTextController,
-                            decoration: InputDecoration(
-                                focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(12),
-                                    borderSide: BorderSide(
-                                        color: Theme.of(context).primaryColor)),
-                                enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(25),
-                                    borderSide: const BorderSide(
-                                        color: Colors.grey, width: 1.5)),
-                                label: const Text('Password')),
+                              left: 18.0, bottom: 18.0, right: 18.0),
+                          child: createInputField(
+                            context: context,
+                            label: 'Password',
                           ),
                         ),
                         ElevatedButton(
@@ -76,6 +58,22 @@ class LoginPage extends StatelessWidget {
               )),
             ),
           ])),
+    );
+  }
+
+  TextFormField createInputField(
+      {required BuildContext context, required String label, String? hint}) {
+    return TextFormField(
+      controller: _emailTextController,
+      decoration: InputDecoration(
+          focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide(color: Theme.of(context).primaryColor)),
+          enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(25),
+              borderSide: const BorderSide(color: Colors.grey, width: 1.5)),
+          label: Text(label),
+          hintText: hint),
     );
   }
 }
