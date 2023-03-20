@@ -27,9 +27,7 @@ class MyApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
         primarySwatch: Colors.green,
       ),
-      home: LoginPage(
-          emailController: TextEditingController(),
-          passwordController: TextEditingController()),
+      home: LoginPage(),
     );
   }
 }

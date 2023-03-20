@@ -36,13 +36,8 @@ class GettingStartedPage extends StatelessWidget {
                 backgroundColor: Colors.amber.shade200,
                 padding: const EdgeInsets.all(16.0)),
             onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => LoginPage(
-                            emailController: TextEditingController(),
-                            passwordController: TextEditingController(),
-                          )));
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => LoginPage()));
             },
           )
         ]),
