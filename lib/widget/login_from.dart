@@ -26,6 +26,9 @@ class LoginForm extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.all(18.0),
           child: createInputField(
+            validate: (value) {
+              return value.isEmpty ? 'Please enter an email' : null;
+            },
             context: context,
             hint: 'jhon@exapled.com',
             label: 'Email',
@@ -36,6 +39,9 @@ class LoginForm extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(left: 18.0, bottom: 18.0, right: 18.0),
           child: createInputField(
+            validate: (value) {
+              return value.isEmpty ? 'please enter a password' : null;
+            },
             context: context,
             label: 'Password',
             value: true,
@@ -45,7 +51,11 @@ class LoginForm extends StatelessWidget {
         ElevatedButton(
             style: ElevatedButton.styleFrom(textStyle: TextStyle(fontSize: 18)),
             child: const Text('Login'),
-            onPressed: () {})
+            onPressed: () {
+              if (_globalKey!.currentState!.validate()) {
+                print('all is good');
+              }
+            })
       ]),
     );
   }

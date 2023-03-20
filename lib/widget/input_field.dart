@@ -5,10 +5,12 @@ TextFormField createInputField(
     required String label,
     String? hint,
     required bool value,
-    required control}) {
+    required control,
+    Function? validate}) {
   return TextFormField(
     obscureText: value,
     controller: control,
+    validator: (value) => validate!(value),
     decoration: InputDecoration(
         focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
