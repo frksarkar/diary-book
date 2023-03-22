@@ -1,3 +1,4 @@
+import 'package:diary_book/ui/main_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -55,9 +56,14 @@ class LoginForm extends StatelessWidget {
             onPressed: () {
               if (_globalKey!.currentState!.validate()) {
                 print('all is good');
-                FirebaseAuth.instance.signInWithEmailAndPassword(
-                    email: _emailTextController.text,
-                    password: _passwordTextController.text);
+                FirebaseAuth.instance
+                    .signInWithEmailAndPassword(
+                        email: _emailTextController.text,
+                        password: _passwordTextController.text)
+                    .then((value) {
+                  Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => MainPage()));
+                });
               }
             }),
       ]),

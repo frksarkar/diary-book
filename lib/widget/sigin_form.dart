@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:diary_book/model/user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -52,14 +54,27 @@ class CreateAccount extends StatelessWidget {
           ),
         ),
         ElevatedButton(
-            style: ElevatedButton.styleFrom(textStyle: TextStyle(fontSize: 18)),
+            style: ElevatedButton.styleFrom(
+                textStyle: const TextStyle(fontSize: 18)),
             child: const Text('sign up'),
             onPressed: () {
               if (_globalKey!.currentState!.validate()) {
                 print('all is good');
-                FirebaseAuth.instance.createUserWithEmailAndPassword(
-                    email: _emailTextController.text,
-                    password: _passwordTextController.text);
+                FirebaseAuth.instance
+                    .createUserWithEmailAndPassword(
+                        email: _emailTextController.text,
+                        password: _passwordTextController.text)
+                    .then((value) {
+                  MUser user = MUser(
+                      userName: _emailTextController.text.split('@')[0],
+                      avatarUrl: 'avatar_url',
+                      profession: 'profession',
+                      uid: value.user!.uid);
+
+                  FirebaseFirestore.instance
+                      .collection('diaryBook')
+                      .add(user.toMap());
+                });
               }
             }),
       ]),

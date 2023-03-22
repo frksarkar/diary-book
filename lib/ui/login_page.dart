@@ -32,6 +32,7 @@ class _LoginPageState extends State<LoginPage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    Spacer(),
                     isCreatedAccountClicked
                         ? CreateAccount(
                             globalKey: _globalKey,
@@ -41,6 +42,7 @@ class _LoginPageState extends State<LoginPage> {
                             globalKey: _globalKey,
                             emailTextController: _emailTextController,
                             passwordTextController: _passwordTextController),
+                    Spacer(),
                     TextButton.icon(
                         icon: const Icon(Icons.man),
                         label: Text(isCreatedAccountClicked
