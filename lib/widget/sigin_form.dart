@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 
 import 'input_field.dart';
 
-class LoginForm extends StatelessWidget {
-  const LoginForm({
+class CreateAccount extends StatelessWidget {
+  const CreateAccount({
     super.key,
     required GlobalKey<FormState>? globalKey,
     required TextEditingController emailTextController,
@@ -22,8 +22,10 @@ class LoginForm extends StatelessWidget {
     return Form(
       key: _globalKey,
       child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-        const Text('Log in',
+        const Text('Sing in',
             style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold)),
+        const Text(
+            'Please enter a valid email and a password that is at least 6 characters'),
         Padding(
           padding: const EdgeInsets.all(18.0),
           child: createInputField(
@@ -51,11 +53,11 @@ class LoginForm extends StatelessWidget {
         ),
         ElevatedButton(
             style: ElevatedButton.styleFrom(textStyle: TextStyle(fontSize: 18)),
-            child: const Text('Login'),
+            child: const Text('sign up'),
             onPressed: () {
               if (_globalKey!.currentState!.validate()) {
                 print('all is good');
-                FirebaseAuth.instance.signInWithEmailAndPassword(
+                FirebaseAuth.instance.createUserWithEmailAndPassword(
                     email: _emailTextController.text,
                     password: _passwordTextController.text);
               }

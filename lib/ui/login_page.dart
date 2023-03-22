@@ -1,13 +1,21 @@
 import 'package:flutter/material.dart';
 
 import '../widget/login_from.dart';
+import '../widget/sigin_form.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
+
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
   final TextEditingController _emailTextController = TextEditingController();
   final TextEditingController _passwordTextController = TextEditingController();
   final GlobalKey<FormState> _globalKey = GlobalKey<FormState>();
 
-  LoginPage({super.key});
+  bool isCreatedAccountClicked = false;
 
   @override
   Widget build(BuildContext context) {
@@ -21,10 +29,34 @@ class LoginPage extends StatelessWidget {
               child: Card(
                   child: Padding(
                 padding: const EdgeInsets.all(28.0),
-                child: LoginForm(
-                    globalKey: _globalKey,
-                    emailTextController: _emailTextController,
-                    passwordTextController: _passwordTextController),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    isCreatedAccountClicked
+                        ? CreateAccount(
+                            globalKey: _globalKey,
+                            emailTextController: _emailTextController,
+                            passwordTextController: _passwordTextController)
+                        : LoginForm(
+                            globalKey: _globalKey,
+                            emailTextController: _emailTextController,
+                            passwordTextController: _passwordTextController),
+                    TextButton.icon(
+                        icon: const Icon(Icons.man),
+                        label: Text(isCreatedAccountClicked
+                            ? 'Already have an account?'
+                            : 'Create Account'),
+                        onPressed: () {
+                          setState(() {
+                            if (!isCreatedAccountClicked) {
+                              isCreatedAccountClicked = true;
+                            } else {
+                              isCreatedAccountClicked = false;
+                            }
+                          });
+                        })
+                  ],
+                ),
               )),
             ),
           ])),
