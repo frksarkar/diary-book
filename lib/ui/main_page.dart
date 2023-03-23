@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
+import '../network/network.dart';
 import 'dialog_box.dart';
 
 class MainPage extends StatefulWidget {
@@ -88,7 +89,9 @@ class _MainPageState extends State<MainPage> {
                             ]),
                         IconButton(
                             icon: const Icon(Icons.logout, color: Colors.red),
-                            onPressed: () {})
+                            onPressed: () {
+                              Network().logout(context);
+                            })
                       ]),
                     );
                   }))
@@ -113,15 +116,17 @@ class _MainPageState extends State<MainPage> {
                     child: Card(
                         elevation: 4,
                         child: TextButton.icon(
-                            onPressed: () {},
-                            icon: const Icon(Icons.add,
-                                size: 35, color: Colors.greenAccent),
-                            label: Row(
-                              children: const [
-                                Text('Write New',
-                                    style: TextStyle(fontSize: 16)),
-                              ],
-                            ))),
+                          icon: const Icon(Icons.add,
+                              size: 35, color: Colors.greenAccent),
+                          label: Row(
+                            children: const [
+                              Text('Write New', style: TextStyle(fontSize: 16)),
+                            ],
+                          ),
+                          onPressed: () {
+                            addNewTaskDialogBox(context);
+                          },
+                        )),
                   )
                 ]))),
         Expanded(flex: 3, child: Container(color: Colors.white))
