@@ -1,10 +1,10 @@
+import 'package:diary_book/model/user.dart';
 import 'package:diary_book/widget/input_field.dart';
 import 'package:flutter/material.dart';
 
-Future<dynamic> dialogBox(
-    BuildContext context, String textName, String textUrl) {
-  final nameValue = TextEditingController(text: textName);
-  final profileUrlValue = TextEditingController(text: textUrl);
+Future<dynamic> dialogBox(BuildContext context, MUser user) {
+  final nameValue = TextEditingController(text: user.userName);
+  final profileUrlValue = TextEditingController(text: user.avatarUrl);
   return showDialog(
     context: context,
     builder: (context) {

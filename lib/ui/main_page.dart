@@ -73,8 +73,7 @@ class _MainPageState extends State<MainPage> {
                                     horizontal: 18.0),
                                 child: InkWell(
                                   onTap: () {
-                                    dialogBox(context, curUser.userName,
-                                        curUser.avatarUrl);
+                                    dialogBox(context, curUser);
                                   },
                                   child: CircleAvatar(
                                       backgroundColor: Colors.transparent,

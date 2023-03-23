@@ -5,13 +5,13 @@ class MUser {
   final String? id;
   final String userName;
   final String avatarUrl;
-  final String profession;
+  final String? profession;
   final String uid;
 
   MUser(
       {required this.userName,
       required this.avatarUrl,
-      required this.profession,
+      this.profession,
       required this.uid,
       this.id});
 
