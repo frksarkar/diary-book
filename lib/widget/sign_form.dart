@@ -67,7 +67,7 @@ class CreateAccount extends StatelessWidget {
                     .then((value) {
                   MUser user = MUser(
                       userName: _emailTextController.text.split('@')[0],
-                      avatarUrl: 'avatar_url',
+                      avatarUrl: 'https://i.pravatar.cc/300',
                       profession: 'profession',
                       uid: value.user!.uid);
 

@@ -1,5 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:diary_book/model/user.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
+
+import 'dialog_box.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -42,31 +47,52 @@ class _MainPageState extends State<MainPage> {
                 },
               ),
               //TODO: create profile
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: Row(children: [
-                  Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 18.0),
-                          child: InkWell(
-                            onTap: () {},
-                            child: const CircleAvatar(
-                                backgroundColor: Colors.transparent,
-                                backgroundImage: NetworkImage(
-                                    'https://loremflickr.com/g/320/240/paris,girl/all'),
-                                radius: 30),
-                          ),
-                        ),
-                        const Text('John dho',
-                            style: TextStyle(color: Colors.grey, fontSize: 18))
+              StreamBuilder(
+                  stream: FirebaseFirestore.instance
+                      .collection('diaryBook')
+                      .snapshots(),
+                  builder: ((context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const CircularProgressIndicator();
+                    }
+                    final curUser = snapshot.data!.docs.map((user) {
+                      return MUser.document(user);
+                    }).where((element) {
+                      return element.uid ==
+                          FirebaseAuth.instance.currentUser!.uid;
+                    }).first;
+
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      child: Row(children: [
+                        Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 18.0),
+                                child: InkWell(
+                                  onTap: () {
+                                    dialogBox(context, curUser.userName,
+                                        curUser.avatarUrl);
+                                  },
+                                  child: CircleAvatar(
+                                      backgroundColor: Colors.transparent,
+                                      backgroundImage:
+                                          NetworkImage(curUser.avatarUrl),
+                                      radius: 30),
+                                ),
+                              ),
+                              Text(curUser.userName,
+                                  style: const TextStyle(
+                                      color: Colors.grey, fontSize: 18))
+                            ]),
+                        IconButton(
+                            icon: const Icon(Icons.logout, color: Colors.red),
+                            onPressed: () {})
                       ]),
-                  IconButton(
-                      icon: const Icon(Icons.logout, color: Colors.red),
-                      onPressed: () {})
-                ]),
-              )
+                    );
+                  }))
             ])
           ]),
       body: Row(children: [

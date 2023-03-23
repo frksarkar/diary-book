@@ -37,7 +37,7 @@ class GettingStartedPage extends StatelessWidget {
                 padding: const EdgeInsets.all(16.0)),
             onPressed: () {
               Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => LoginPage()));
+                  MaterialPageRoute(builder: (context) => const LoginPage()));
             },
           )
         ]),

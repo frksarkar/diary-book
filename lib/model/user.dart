@@ -26,7 +26,7 @@ class MUser {
 
   Map<String, dynamic> toMap() {
     return {
-      'uie': uid,
+      'uid': uid,
       'user_name': userName,
       'avatar_url': avatarUrl,
       'profession': profession,
