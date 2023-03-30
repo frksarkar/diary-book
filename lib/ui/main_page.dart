@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:diary_book/model/diary.dart';
 import 'package:diary_book/model/user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -22,14 +23,30 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     final titleTextController = TextEditingController();
     final descriptionTextController = TextEditingController();
+    DateTime selectedDate = DateTime.now();
+
+    addTaskDialogBox() {
+      return showDialog(
+          context: context,
+          builder: (context) {
+            return NewTaskDialog(
+                selectedDate: selectedDate,
+                titleTextController: titleTextController,
+                descriptionTextController: descriptionTextController);
+          });
+    }
+
     return Scaffold(
       appBar: AppBar(
           backgroundColor: Colors.grey.shade100,
           toolbarHeight: 100,
           elevation: 4,
           title: Row(children: [
-            Text('Diary', style: TextStyle(color: Colors.blueGrey.shade400)),
-            Text('Book', style: TextStyle(color: Colors.green.shade400))
+            Text('Diary',
+                style:
+                    TextStyle(color: Colors.blueGrey.shade400, fontSize: 40)),
+            Text('Book',
+                style: TextStyle(color: Colors.green.shade400, fontSize: 40))
           ]),
           actions: [
             Row(children: [
@@ -112,7 +129,12 @@ class _MainPageState extends State<MainPage> {
                       padding: const EdgeInsets.all(18.0),
                       child: SfDateRangePicker(
                         onSelectionChanged:
-                            (dateRangePickerSelectionChangedArgs) {},
+                            (dateRangePickerSelectionChangedArgs) {
+                          setState(() {
+                            selectedDate =
+                                dateRangePickerSelectionChangedArgs.value;
+                          });
+                        },
                       )),
                   Padding(
                     padding: const EdgeInsets.all(28.0),
@@ -127,22 +149,56 @@ class _MainPageState extends State<MainPage> {
                             ],
                           ),
                           onPressed: () {
-                            showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return NewTaskDialog(
-                                      titleTextController: titleTextController,
-                                      descriptionTextController:
-                                          descriptionTextController);
-                                });
+                            addTaskDialogBox();
                           },
                         )),
                   )
                 ]))),
-        Expanded(flex: 3, child: Container(color: Colors.white))
+        StreamBuilder(
+          stream:
+              FirebaseFirestore.instance.collection('diaryNotes').snapshots(),
+          builder: (BuildContext context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const CircularProgressIndicator();
+            }
+            var filteredList = snapshot.data!.docs
+                .map((e) {
+                  return Diary.fromDocument(e);
+                })
+                .where((element) =>
+                    element.userId == FirebaseAuth.instance.currentUser!.uid)
+                .toList();
+            return Expanded(
+              flex: 3,
+              child: Container(
+                color: Colors.white,
+                child: Column(
+                  children: [
+                    Expanded(
+                        child: ListView.builder(
+                      itemCount: filteredList.length,
+                      itemBuilder: (context, index) {
+                        return Card(
+                          elevation: 3,
+                          child: ListTile(
+                            title: Text(filteredList[index].title.toString()),
+                          ),
+                        );
+                      },
+                    ))
+                  ],
+                ),
+              ),
+            );
+          },
+        )
       ]),
       floatingActionButton: FloatingActionButton(
-          tooltip: 'Add', onPressed: () {}, child: const Icon(Icons.add)),
+          tooltip: 'Add',
+          onPressed: () {
+            addTaskDialogBox();
+          },
+          child: const Icon(Icons.add)),
     );
   }
 }

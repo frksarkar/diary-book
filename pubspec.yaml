@@ -35,6 +35,7 @@ dependencies:
   firebase_storage: ^11.0.15
   flutter:
     sdk: flutter
+  intl: ^0.18.0
   syncfusion_flutter_datepicker: ^20.4.54
 
 dev_dependencies:

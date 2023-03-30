@@ -32,11 +32,11 @@ class Diary {
   Map<String, dynamic> toMap() {
     return {
       'user_id': userId,
+      'time': time,
+      'photo_url': photoUrl,
+      'author': author,
       'title': title,
       'description': description,
-      'author': author,
-      'time': time,
-      'photoUrl': photoUrl,
     };
   }
 }

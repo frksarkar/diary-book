@@ -1,13 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:diary_book/model/diary.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class NewTaskDialog extends StatefulWidget {
   const NewTaskDialog({
     super.key,
+    this.selectedDate,
     required this.titleTextController,
     required this.descriptionTextController,
   });
 
+  final DateTime? selectedDate;
   final TextEditingController titleTextController;
   final TextEditingController descriptionTextController;
 
@@ -17,6 +21,8 @@ class NewTaskDialog extends StatefulWidget {
 
 class _NewTaskDialogState extends State<NewTaskDialog> {
   var btnText = 'Done';
+  CollectionReference diaryCollection =
+      FirebaseFirestore.instance.collection('diaryNotes');
 
   @override
   Widget build(BuildContext context) {
@@ -40,15 +46,23 @@ class _NewTaskDialogState extends State<NewTaskDialog> {
                   style: ElevatedButton.styleFrom(elevation: 4),
                   child: Text(btnText),
                   onPressed: () {
-                    setState(() {
-                      btnText = 'saving...';
-                    });
-                    Future.delayed(const Duration(milliseconds: 2500))
-                        .then((value) => Navigator.of(context).pop());
-                    FirebaseFirestore.instance.collection('diaryNotes').add({
-                      'title': widget.titleTextController.text,
-                      'description': widget.descriptionTextController.text,
-                    });
+                    final fieldNotEmpty =
+                        widget.titleTextController.text.isNotEmpty &&
+                            widget.descriptionTextController.text.isNotEmpty;
+                    if (fieldNotEmpty) {
+                      setState(() {
+                        btnText = 'saving...';
+                      });
+                      Future.delayed(const Duration(milliseconds: 2500))
+                          .then((value) => Navigator.of(context).pop());
+                      diaryCollection.add(Diary(
+                        userId: FirebaseAuth.instance.currentUser!.uid,
+                        time: Timestamp.now(),
+                        author: 'faruk sarkar',
+                        title: widget.titleTextController.text,
+                        description: widget.descriptionTextController.text,
+                      ).toMap());
+                    }
                   },
                 ),
               ],
@@ -75,7 +89,7 @@ class _NewTaskDialogState extends State<NewTaskDialog> {
                       child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text('24/08/2070'),
+                      Text(widget.selectedDate.toString()),
                       SizedBox(
                           width: (MediaQuery.of(context).size.height * 0.8),
                           child: Form(
