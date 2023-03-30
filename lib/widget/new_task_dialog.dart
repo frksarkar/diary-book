@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:diary_book/model/diary.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class NewTaskDialog extends StatefulWidget {
   const NewTaskDialog({
@@ -57,8 +58,10 @@ class _NewTaskDialogState extends State<NewTaskDialog> {
                           .then((value) => Navigator.of(context).pop());
                       diaryCollection.add(Diary(
                         userId: FirebaseAuth.instance.currentUser!.uid,
-                        time: Timestamp.now(),
-                        author: 'faruk sarkar',
+                        time: Timestamp.fromDate(widget.selectedDate!),
+                        author: FirebaseAuth.instance.currentUser!.email!
+                            .split('@')
+                            .first,
                         title: widget.titleTextController.text,
                         description: widget.descriptionTextController.text,
                       ).toMap());
@@ -89,7 +92,7 @@ class _NewTaskDialogState extends State<NewTaskDialog> {
                       child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(widget.selectedDate.toString()),
+                      Text(DateFormat.yMMMd().format(widget.selectedDate!)),
                       SizedBox(
                           width: (MediaQuery.of(context).size.height * 0.8),
                           child: Form(
