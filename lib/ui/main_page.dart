@@ -7,6 +7,8 @@ import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 import '../network/network.dart';
+import '../widget/bady_list_view.dart';
+import '../widget/nav_bar_profile.dart';
 import '../widget/new_task_dialog.dart';
 import 'dialog_box.dart';
 
@@ -25,9 +27,8 @@ class _MainPageState extends State<MainPage> {
     final titleTextController = TextEditingController();
     final descriptionTextController = TextEditingController();
     DateTime selectedDate = DateTime.now();
-
     addTaskDialogBox() {
-      return showDialog(
+      showDialog(
           context: context,
           builder: (context) {
             return NewTaskDialog(
@@ -69,53 +70,7 @@ class _MainPageState extends State<MainPage> {
                 },
               ),
               //TODO: create profile
-              StreamBuilder(
-                  stream: FirebaseFirestore.instance
-                      .collection('diaryBook')
-                      .snapshots(),
-                  builder: ((context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const CircularProgressIndicator();
-                    }
-                    final curUser = snapshot.data!.docs.map((user) {
-                      return MUser.document(user);
-                    }).where((element) {
-                      return element.uid ==
-                          FirebaseAuth.instance.currentUser!.uid;
-                    }).first;
-
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8),
-                      child: Row(children: [
-                        Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 18.0),
-                                child: InkWell(
-                                  onTap: () {
-                                    dialogBox(context, curUser);
-                                  },
-                                  child: CircleAvatar(
-                                      backgroundColor: Colors.transparent,
-                                      backgroundImage:
-                                          NetworkImage(curUser.avatarUrl),
-                                      radius: 30),
-                                ),
-                              ),
-                              Text(curUser.userName,
-                                  style: const TextStyle(
-                                      color: Colors.grey, fontSize: 18))
-                            ]),
-                        IconButton(
-                            icon: const Icon(Icons.logout, color: Colors.red),
-                            onPressed: () {
-                              Network().logout(context);
-                            })
-                      ]),
-                    );
-                  }))
+              const NavBarProfile()
             ])
           ]),
       body: Row(children: [
@@ -131,10 +86,8 @@ class _MainPageState extends State<MainPage> {
                       child: SfDateRangePicker(
                         onSelectionChanged:
                             (dateRangePickerSelectionChangedArgs) {
-                          setState(() {
-                            selectedDate =
-                                dateRangePickerSelectionChangedArgs.value;
-                          });
+                          selectedDate =
+                              dateRangePickerSelectionChangedArgs.value;
                         },
                       )),
                   Padding(
@@ -155,44 +108,7 @@ class _MainPageState extends State<MainPage> {
                         )),
                   )
                 ]))),
-        StreamBuilder(
-          stream:
-              FirebaseFirestore.instance.collection('diaryNotes').snapshots(),
-          builder: (BuildContext context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const CircularProgressIndicator();
-            }
-            var filteredList = snapshot.data!.docs
-                .map((e) {
-                  return Diary.fromDocument(e);
-                })
-                .where((element) =>
-                    element.userId == FirebaseAuth.instance.currentUser!.uid)
-                .toList();
-            return Expanded(
-              flex: 3,
-              child: Container(
-                color: Colors.white,
-                child: Column(
-                  children: [
-                    Expanded(
-                        child: ListView.builder(
-                      itemCount: filteredList.length,
-                      itemBuilder: (context, index) {
-                        return Card(
-                          elevation: 3,
-                          child: ListTile(
-                            title: Text(filteredList[index].title.toString()),
-                          ),
-                        );
-                      },
-                    ))
-                  ],
-                ),
-              ),
-            );
-          },
-        )
+        bodyListView()
       ]),
       floatingActionButton: FloatingActionButton(
           tooltip: 'Add',
