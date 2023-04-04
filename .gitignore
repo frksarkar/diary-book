@@ -30,6 +30,7 @@ migrate_working_dir/
 .packages
 .pub-cache/
 .pub/
+.vscode/
 /build/
 
 # Symbolication related
@@ -42,3 +43,7 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+/ios
+/linux
+/windows
+
