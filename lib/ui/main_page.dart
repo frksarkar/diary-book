@@ -1,16 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:diary_book/model/diary.dart';
-import 'package:diary_book/model/user.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
-import '../network/network.dart';
-import '../widget/bady_list_view.dart';
+import '../widget/body_list_view.dart';
 import '../widget/nav_bar_profile.dart';
 import '../widget/new_task_dialog.dart';
-import 'dialog_box.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
