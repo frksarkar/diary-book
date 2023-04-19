@@ -28,18 +28,19 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
-  cloud_firestore:
-  cupertino_icons:
-  firebase_auth:
-  firebase_core:
-  firebase_storage:
+  cloud_firestore: null
+  cupertino_icons: null
+  firebase_auth: null
+  firebase_core: null
+  firebase_storage: null
   flutter:
     sdk: flutter
-  intl:
-  syncfusion_flutter_datepicker:
+  image_picker_web: ^3.0.0+1
+  intl: null
+  syncfusion_flutter_datepicker: null
 
 dev_dependencies:
-  flutter_lints:
+  flutter_lints: null
   flutter_test:
     sdk: flutter
 
