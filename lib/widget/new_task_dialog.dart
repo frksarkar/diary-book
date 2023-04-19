@@ -1,7 +1,10 @@
+import 'dart:html' as html;
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:diary_book/model/diary.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker_web/image_picker_web.dart';
 import 'package:intl/intl.dart';
 
 class NewTaskDialog extends StatefulWidget {
@@ -24,6 +27,9 @@ class _NewTaskDialogState extends State<NewTaskDialog> {
   var btnText = 'Done';
   CollectionReference diaryCollection =
       FirebaseFirestore.instance.collection('diaryNotes');
+  html.File? _cloudFile;
+  var _fileBytes;
+  Image? _imageWidget;
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +86,9 @@ class _NewTaskDialogState extends State<NewTaskDialog> {
                       children: [
                         IconButton(
                           icon: const Icon(Icons.image_rounded),
-                          onPressed: () {},
+                          onPressed: () {
+                            getMultipleImageInfos();
+                          },
                         ),
                       ],
                     ),
@@ -102,11 +110,7 @@ class _NewTaskDialogState extends State<NewTaskDialog> {
                                   height: (MediaQuery.of(context).size.height *
                                           0.8) /
                                       2,
-                                  child: Container(
-                                    width: MediaQuery.of(context).size.width,
-                                    color: Colors.amber,
-                                    child: const Text('image here'),
-                                  )),
+                                  child: _imageWidget),
                               TextFormField(
                                 controller: widget.titleTextController,
                                 decoration:
@@ -129,5 +133,20 @@ class _NewTaskDialogState extends State<NewTaskDialog> {
         ),
       ),
     );
+  }
+
+  Future<void> getMultipleImageInfos() async {
+    var mediaData = await ImagePickerWeb.getImageInfo;
+    // String mimeType = mime(Path.basename(mediaData!.fileName!))!;
+    // html.File mediaFile =
+    //     html.File(mediaData.data!, mediaData.fileName!, {'type': mimeType});
+
+    // if (mediaFile != null) {
+    setState(() {
+      // _cloudFile = mediaFile;
+      _fileBytes = mediaData!.data;
+      _imageWidget = Image.memory(mediaData.data!);
+    });
+    // }
   }
 }

@@ -37,7 +37,9 @@ dependencies:
         sdk: flutter
     image_picker_web: any
     intl: null
+    mime_type: ^1.0.0
     syncfusion_flutter_datepicker: null
+    universal_html: ^2.2.1
 
 dev_dependencies:
     flutter_lints: null
