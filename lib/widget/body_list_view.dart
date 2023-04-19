@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../model/diary.dart';
+import '../util/util.dart';
 
 StreamBuilder<QuerySnapshot<Map<String, dynamic>>> bodyListView() {
   return StreamBuilder(
@@ -20,24 +21,74 @@ StreamBuilder<QuerySnapshot<Map<String, dynamic>>> bodyListView() {
           .toList();
       return Expanded(
         flex: 3,
-        child: Container(
-          color: Colors.white,
-          child: Column(
-            children: [
-              Expanded(
-                  child: ListView.builder(
+        child: Column(
+          children: [
+            Expanded(
+                child: SizedBox(
+              width: MediaQuery.of(context).size.width * 0.4,
+              child: ListView.builder(
                 itemCount: filteredList.length,
                 itemBuilder: (context, index) {
+                  var element = filteredList[index];
                   return Card(
                     elevation: 3,
                     child: ListTile(
-                      title: Text(filteredList[index].title.toString()),
-                    ),
+                        title: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              formatDateTimestamp(element.time!),
+                              style: const TextStyle(
+                                  color: Colors.blueGrey,
+                                  fontSize: 19,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            IconButton(
+                                icon: const Icon(Icons.delete_forever),
+                                onPressed: () {})
+                          ],
+                        ),
+                        subtitle: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(formatDateFromTimestampHour(element.time),
+                                    style: TextStyle(color: Colors.green)),
+                                IconButton(
+                                    onPressed: () {},
+                                    icon: Icon(Icons.more_horiz))
+                              ],
+                            ),
+                            Image.network("https://loremflickr.com/400/300"),
+                            Row(
+                              children: [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    Text(
+                                      element.title.toString(),
+                                      style: const TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    Text(
+                                      element.description.toString(),
+                                      style: const TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w500),
+                                    )
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ],
+                        )),
                   );
                 },
-              ))
-            ],
-          ),
+              ),
+            ))
+          ],
         ),
       );
     },
