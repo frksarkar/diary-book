@@ -10,7 +10,7 @@ StreamBuilder<QuerySnapshot<Map<String, dynamic>>> bodyListView() {
     stream: FirebaseFirestore.instance.collection('diaryNotes').snapshots(),
     builder: (BuildContext context, snapshot) {
       if (snapshot.connectionState == ConnectionState.waiting) {
-        return const CircularProgressIndicator();
+        return const LinearProgressIndicator();
       }
       var filteredList = snapshot.data!.docs
           .map((e) {

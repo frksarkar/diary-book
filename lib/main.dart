@@ -1,8 +1,7 @@
 import 'package:diary_book/firebase_options.dart';
+import 'package:diary_book/ui/main_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-
-import 'ui/login_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,7 +23,7 @@ class MyApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
         primarySwatch: Colors.green,
       ),
-      home: const LoginPage(),
+      home: const MainPage(),
     );
   }
 }
