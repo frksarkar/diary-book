@@ -24,7 +24,7 @@ class NavBarProfile extends StatelessWidget {
           }).where((element) {
             return element.uid == FirebaseAuth.instance.currentUser!.uid;
           }).first;
-
+          // print(curUser.avatarUrl);
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8),
             child: Row(children: [
@@ -37,7 +37,10 @@ class NavBarProfile extends StatelessWidget {
                     },
                     child: CircleAvatar(
                         backgroundColor: Colors.transparent,
-                        backgroundImage: NetworkImage(curUser.avatarUrl),
+                        backgroundImage: NetworkImage(
+                            (curUser.avatarUrl.isNotEmpty)
+                                ? curUser.avatarUrl
+                                : 'https://i.pravatar.cc/300'),
                         radius: 30),
                   ),
                 ),
