@@ -6,8 +6,10 @@ import '../model/diary.dart';
 import '../util/util.dart';
 
 StreamBuilder<QuerySnapshot<Map<String, dynamic>>> bodyListView() {
+  CollectionReference<Map<String, dynamic>> bookCollectionReference =
+      FirebaseFirestore.instance.collection('diaryNotes');
   return StreamBuilder(
-    stream: FirebaseFirestore.instance.collection('diaryNotes').snapshots(),
+    stream: bookCollectionReference.snapshots(),
     builder: (BuildContext context, snapshot) {
       if (snapshot.connectionState == ConnectionState.waiting) {
         return const LinearProgressIndicator();
@@ -45,7 +47,40 @@ StreamBuilder<QuerySnapshot<Map<String, dynamic>>> bodyListView() {
                             ),
                             IconButton(
                                 icon: const Icon(Icons.delete_forever),
-                                onPressed: () {})
+                                onPressed: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return AlertDialog(
+                                        title: const Text(
+                                          'Delete Entry?',
+                                          style: TextStyle(color: Colors.red),
+                                        ),
+                                        content: const Text(
+                                            'Are you sure you want to delete this entry?\nthis action can\'t be reversed. '),
+                                        actions: [
+                                          TextButton(
+                                            child: const Text('cancel'),
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                          ),
+                                          TextButton(
+                                            child: const Text('delete'),
+                                            onPressed: () {
+                                              bookCollectionReference
+                                                  .doc(element.id)
+                                                  .delete()
+                                                  .then((value) =>
+                                                      Navigator.of(context)
+                                                          .pop());
+                                            },
+                                          )
+                                        ],
+                                      );
+                                    },
+                                  );
+                                })
                           ],
                         ),
                         subtitle: Column(
