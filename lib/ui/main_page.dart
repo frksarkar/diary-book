@@ -39,9 +39,9 @@ class _MainPageState extends State<MainPage> {
           title: Row(children: [
             Text('Diary',
                 style:
-                    TextStyle(color: Colors.blueGrey.shade400, fontSize: 40)),
+                    TextStyle(color: Colors.blueGrey.shade400, fontSize: 35)),
             Text('Book',
-                style: TextStyle(color: Colors.green.shade400, fontSize: 40))
+                style: TextStyle(color: Colors.green.shade400, fontSize: 35))
           ]),
           actions: [
             Row(children: [

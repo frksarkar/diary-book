@@ -54,13 +54,16 @@ StreamBuilder<QuerySnapshot<Map<String, dynamic>>> bodyListView() {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(formatDateFromTimestampHour(element.time),
-                                    style: TextStyle(color: Colors.green)),
+                                    style:
+                                        const TextStyle(color: Colors.green)),
                                 IconButton(
                                     onPressed: () {},
-                                    icon: Icon(Icons.more_horiz))
+                                    icon: const Icon(Icons.more_horiz))
                               ],
                             ),
-                            Image.network("https://loremflickr.com/400/300"),
+                            Image.network((element.photoUrl == null)
+                                ? "https://loremflickr.com/400/300"
+                                : element.photoUrl.toString()),
                             Row(
                               children: [
                                 Column(

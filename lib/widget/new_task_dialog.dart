@@ -3,6 +3,7 @@ import 'dart:html' as html;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:diary_book/model/diary.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
 import 'package:image_picker_web/image_picker_web.dart';
 import 'package:intl/intl.dart';
@@ -53,6 +54,12 @@ class _NewTaskDialogState extends State<NewTaskDialog> {
                   style: ElevatedButton.styleFrom(elevation: 4),
                   child: Text(btnText),
                   onPressed: () {
+                    firebase_storage.FirebaseStorage fs =
+                        firebase_storage.FirebaseStorage.instance;
+                    DateTime dateTime = DateTime.now();
+                    final path = '$dateTime';
+                    String? currId;
+
                     final fieldNotEmpty =
                         widget.titleTextController.text.isNotEmpty &&
                             widget.descriptionTextController.text.isNotEmpty;
@@ -62,7 +69,8 @@ class _NewTaskDialogState extends State<NewTaskDialog> {
                       });
                       Future.delayed(const Duration(milliseconds: 2500))
                           .then((value) => Navigator.of(context).pop());
-                      diaryCollection.add(Diary(
+                      diaryCollection
+                          .add(Diary(
                         userId: FirebaseAuth.instance.currentUser!.uid,
                         time: Timestamp.fromDate(widget.selectedDate!),
                         author: FirebaseAuth.instance.currentUser!.email!
@@ -70,7 +78,35 @@ class _NewTaskDialogState extends State<NewTaskDialog> {
                             .first,
                         title: widget.titleTextController.text,
                         description: widget.descriptionTextController.text,
-                      ).toMap());
+                      ).toMap())
+                          .then((value) {
+                        setState(() {
+                          currId = value.id;
+                        });
+                        return null;
+                      });
+                    }
+
+                    if (_fileBytes != null) {
+                      firebase_storage.SettableMetadata metaData =
+                          firebase_storage.SettableMetadata(
+                              contentType: 'image/jpeg',
+                              customMetadata: {'picked-file-path': path});
+
+                      fs
+                          .ref()
+                          .child(
+                              'images/$path${FirebaseAuth.instance.currentUser!.uid}')
+                          .putData(_fileBytes, metaData)
+                          .then((value) {
+                        value.ref.getDownloadURL().then((value) {
+                          diaryCollection
+                              .doc(currId)
+                              .update({'photo_url': value.toString()});
+                          return null;
+                        });
+                        return null;
+                      });
                     }
                   },
                 ),
@@ -110,7 +146,14 @@ class _NewTaskDialogState extends State<NewTaskDialog> {
                                   height: (MediaQuery.of(context).size.height *
                                           0.8) /
                                       2,
-                                  child: _imageWidget),
+                                  child: (_imageWidget != null)
+                                      ? _imageWidget
+                                      : const Center(
+                                          child: Text(
+                                            'Image Preview',
+                                            style: TextStyle(fontSize: 25),
+                                          ),
+                                        )),
                               TextFormField(
                                 controller: widget.titleTextController,
                                 decoration:
