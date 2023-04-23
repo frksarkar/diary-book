@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 
 import '../model/diary.dart';
 import '../util/util.dart';
+import 'delete_dialog_entry.dart';
+import 'inner_list_view.dart';
 
 StreamBuilder<QuerySnapshot<Map<String, dynamic>>> bodyListView() {
   CollectionReference<Map<String, dynamic>> bookCollectionReference =
@@ -35,80 +37,54 @@ StreamBuilder<QuerySnapshot<Map<String, dynamic>>> bodyListView() {
                   return Card(
                     elevation: 3,
                     child: ListTile(
-                        title: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              formatDateTimestamp(element.time!),
-                              style: const TextStyle(
-                                  color: Colors.blueGrey,
-                                  fontSize: 19,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            IconButton(
-                                icon: const Icon(Icons.delete_forever),
-                                onPressed: () {
-                                  showDialog(
-                                    context: context,
-                                    builder: (context) {
-                                      return AlertDialog(
-                                        title: const Text(
-                                          'Delete Entry?',
-                                          style: TextStyle(color: Colors.red),
-                                        ),
-                                        content: const Text(
-                                            'Are you sure you want to delete this entry?\nthis action can\'t be reversed. '),
-                                        actions: [
-                                          TextButton(
-                                            child: const Text('cancel'),
-                                            onPressed: () {
-                                              Navigator.of(context).pop();
-                                            },
-                                          ),
-                                          TextButton(
-                                            child: const Text('delete'),
-                                            onPressed: () {
-                                              bookCollectionReference
-                                                  .doc(element.id)
-                                                  .delete()
-                                                  .then((value) =>
-                                                      Navigator.of(context)
-                                                          .pop());
-                                            },
-                                          )
-                                        ],
-                                      );
-                                    },
-                                  );
-                                })
-                          ],
-                        ),
-                        subtitle: Column(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(formatDateFromTimestampHour(element.time),
-                                    style:
-                                        const TextStyle(color: Colors.green)),
-                                IconButton(
-                                    onPressed: () {},
-                                    icon: const Icon(Icons.more_horiz))
-                              ],
-                            ),
-                            Image.network((element.photoUrl == null)
-                                ? "https://loremflickr.com/400/300"
-                                : element.photoUrl.toString()),
-                            Row(
-                              children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.end,
+                      title: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            formatDateTimestamp(element.time!),
+                            style: const TextStyle(
+                                color: Colors.blueGrey,
+                                fontSize: 19,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          IconButton(
+                              icon: const Icon(Icons.delete_forever),
+                              onPressed: () {
+                                deleteDialogEntry(
+                                    context, bookCollectionReference, element);
+                              })
+                        ],
+                      ),
+                      subtitle: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(formatDateFromTimestampHour(element.time),
+                                  style: const TextStyle(color: Colors.green)),
+                              IconButton(
+                                  onPressed: () {},
+                                  icon: const Icon(Icons.more_horiz))
+                            ],
+                          ),
+                          Image.network((element.photoUrl == null)
+                              ? "https://loremflickr.com/400/300"
+                              : element.photoUrl.toString()),
+                          Row(
+                            children: [
+                              Flexible(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
-                                      element.title.toString(),
-                                      style: const TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 8.0),
+                                      child: Text(
+                                        element.title.toString(),
+                                        style: const TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold),
+                                      ),
                                     ),
                                     Text(
                                       element.description.toString(),
@@ -118,10 +94,22 @@ StreamBuilder<QuerySnapshot<Map<String, dynamic>>> bodyListView() {
                                     )
                                   ],
                                 ),
-                              ],
-                            ),
-                          ],
-                        )),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      onTap: () {
+                        showDialog(
+                            context: context,
+                            builder: (context) {
+                              return InnerListView(
+                                  element: element,
+                                  bookCollectionReference:
+                                      bookCollectionReference);
+                            });
+                      },
+                    ),
                   );
                 },
               ),

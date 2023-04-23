@@ -37,10 +37,7 @@ class NavBarProfile extends StatelessWidget {
                     },
                     child: CircleAvatar(
                         backgroundColor: Colors.transparent,
-                        backgroundImage: NetworkImage(
-                            (curUser.avatarUrl.isNotEmpty)
-                                ? curUser.avatarUrl
-                                : 'https://i.pravatar.cc/300'),
+                        backgroundImage: NetworkImage(curUser.avatarUrl),
                         radius: 30),
                   ),
                 ),
