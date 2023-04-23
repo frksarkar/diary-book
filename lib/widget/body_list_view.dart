@@ -60,7 +60,8 @@ StreamBuilder<QuerySnapshot<Map<String, dynamic>>> bodyListView() {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(formatDateFromTimestampHour(element.time),
+                              Text(
+                                  '• ${formatDateFromTimestampHour(element.time)}',
                                   style: const TextStyle(color: Colors.green)),
                               IconButton(
                                   onPressed: () {},
