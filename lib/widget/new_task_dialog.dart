@@ -1,5 +1,3 @@
-import 'dart:html' as html;
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:diary_book/model/diary.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -28,7 +26,6 @@ class _NewTaskDialogState extends State<NewTaskDialog> {
   var btnText = 'Done';
   CollectionReference diaryCollection =
       FirebaseFirestore.instance.collection('diaryNotes');
-  html.File? _cloudFile;
   var _fileBytes;
   Image? _imageWidget;
 
@@ -44,71 +41,77 @@ class _NewTaskDialogState extends State<NewTaskDialog> {
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                TextButton(
-                  child: const Text('Discard'),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextButton(
+                    child: const Text('Discard'),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
                 ),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(elevation: 4),
-                  child: Text(btnText),
-                  onPressed: () {
-                    firebase_storage.FirebaseStorage fs =
-                        firebase_storage.FirebaseStorage.instance;
-                    DateTime dateTime = DateTime.now();
-                    final path = '$dateTime';
-                    String? currId;
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(elevation: 4),
+                    child: Text(btnText),
+                    onPressed: () {
+                      firebase_storage.FirebaseStorage fs =
+                          firebase_storage.FirebaseStorage.instance;
+                      DateTime dateTime = DateTime.now();
+                      final path = '$dateTime';
+                      String? currId;
 
-                    final fieldNotEmpty =
-                        widget.titleTextController.text.isNotEmpty &&
-                            widget.descriptionTextController.text.isNotEmpty;
-                    if (fieldNotEmpty) {
-                      setState(() {
-                        btnText = 'saving...';
-                      });
-                      Future.delayed(const Duration(milliseconds: 2500))
-                          .then((value) => Navigator.of(context).pop());
-                      diaryCollection
-                          .add(Diary(
-                        userId: FirebaseAuth.instance.currentUser!.uid,
-                        time: Timestamp.fromDate(widget.selectedDate!),
-                        author: FirebaseAuth.instance.currentUser!.email!
-                            .split('@')
-                            .first,
-                        title: widget.titleTextController.text,
-                        description: widget.descriptionTextController.text,
-                      ).toMap())
-                          .then((value) {
+                      final fieldNotEmpty =
+                          widget.titleTextController.text.isNotEmpty &&
+                              widget.descriptionTextController.text.isNotEmpty;
+                      if (fieldNotEmpty) {
                         setState(() {
-                          currId = value.id;
+                          btnText = 'saving...';
                         });
-                        return null;
-                      });
-                    }
-
-                    if (_fileBytes != null) {
-                      firebase_storage.SettableMetadata metaData =
-                          firebase_storage.SettableMetadata(
-                              contentType: 'image/jpeg',
-                              customMetadata: {'picked-file-path': path});
-
-                      fs
-                          .ref()
-                          .child(
-                              'images/$path${FirebaseAuth.instance.currentUser!.uid}')
-                          .putData(_fileBytes, metaData)
-                          .then((value) {
-                        value.ref.getDownloadURL().then((value) {
-                          diaryCollection
-                              .doc(currId)
-                              .update({'photo_url': value.toString()});
+                        Future.delayed(const Duration(milliseconds: 2500))
+                            .then((value) => Navigator.of(context).pop());
+                        diaryCollection
+                            .add(Diary(
+                          userId: FirebaseAuth.instance.currentUser!.uid,
+                          time: Timestamp.fromDate(widget.selectedDate!),
+                          author: FirebaseAuth.instance.currentUser!.email!
+                              .split('@')
+                              .first,
+                          title: widget.titleTextController.text,
+                          description: widget.descriptionTextController.text,
+                        ).toMap())
+                            .then((value) {
+                          setState(() {
+                            currId = value.id;
+                          });
                           return null;
                         });
-                        return null;
-                      });
-                    }
-                  },
+                      }
+
+                      if (_fileBytes != null) {
+                        firebase_storage.SettableMetadata metaData =
+                            firebase_storage.SettableMetadata(
+                                contentType: 'image/jpeg',
+                                customMetadata: {'picked-file-path': path});
+
+                        fs
+                            .ref()
+                            .child(
+                                'images/$path${FirebaseAuth.instance.currentUser!.uid}')
+                            .putData(_fileBytes, metaData)
+                            .then((value) {
+                          value.ref.getDownloadURL().then((value) {
+                            diaryCollection
+                                .doc(currId)
+                                .update({'photo_url': value.toString()});
+                            return null;
+                          });
+                          return null;
+                        });
+                      }
+                    },
+                  ),
                 ),
               ],
             ),
@@ -122,8 +125,8 @@ class _NewTaskDialogState extends State<NewTaskDialog> {
                       children: [
                         IconButton(
                           icon: const Icon(Icons.image_rounded),
-                          onPressed: () {
-                            getMultipleImageInfos();
+                          onPressed: () async {
+                            await getMultipleImageInfos();
                           },
                         ),
                       ],
