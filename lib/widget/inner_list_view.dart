@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:diary_book/widget/update_entry_dialog.dart';
 import 'package:flutter/material.dart';
 
 import '../model/diary.dart';
@@ -17,10 +18,6 @@ class InnerListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TextEditingController titleTextController =
-        TextEditingController(text: element.title);
-    final TextEditingController descriptionTextController =
-        TextEditingController(text: element.description);
     return AlertDialog(
       title: Column(
         children: [
@@ -42,128 +39,10 @@ class InnerListView extends StatelessWidget {
                       showDialog(
                           context: context,
                           builder: (BuildContext context) {
-                            return AlertDialog(
-                              content: SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.80,
-                                height:
-                                    MediaQuery.of(context).size.height * 0.80,
-                                child: Column(
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.end,
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: TextButton(
-                                            child: const Text('Discard'),
-                                            onPressed: () {
-                                              Navigator.of(context).pop();
-                                            },
-                                          ),
-                                        ),
-                                        ElevatedButton(
-                                          style: ElevatedButton.styleFrom(
-                                              elevation: 4),
-                                          child: Text('save'),
-                                          onPressed: () {},
-                                        ),
-                                      ],
-                                    ),
-                                    Expanded(
-                                        flex: 1,
-                                        child: Row(
-                                          children: [
-                                            Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Padding(
-                                                  padding: const EdgeInsets
-                                                      .symmetric(vertical: 20),
-                                                  child: IconButton(
-                                                    splashRadius: 20,
-                                                    icon:
-                                                        const Icon(Icons.image),
-                                                    onPressed: () {},
-                                                  ),
-                                                ),
-                                                IconButton(
-                                                    splashRadius: 20,
-                                                    icon: const Icon(
-                                                      Icons.delete_outline,
-                                                      color: Colors.redAccent,
-                                                    ),
-                                                    onPressed: () {
-                                                      Navigator.of(context)
-                                                          .pop();
-                                                      deleteDialogEntry(
-                                                          context,
-                                                          bookCollectionReference,
-                                                          element);
-                                                    })
-                                              ],
-                                            ),
-                                            const SizedBox(
-                                              width: 30,
-                                            ),
-                                            Expanded(
-                                                flex: 3,
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    Text(formatDateTimestamp(
-                                                        element.time!)),
-                                                    SizedBox(
-                                                        width: MediaQuery.of(
-                                                                    context)
-                                                                .size
-                                                                .width *
-                                                            0.50,
-                                                        height: MediaQuery.of(
-                                                                    context)
-                                                                .size
-                                                                .height *
-                                                            0.50,
-                                                        child: Image.network(
-                                                            element.photoUrl
-                                                                .toString())),
-                                                    SizedBox(
-                                                      width:
-                                                          MediaQuery.of(context)
-                                                                  .size
-                                                                  .width *
-                                                              0.5,
-                                                      child: Column(
-                                                        children: [
-                                                          TextFormField(
-                                                            controller:
-                                                                titleTextController,
-                                                            decoration:
-                                                                const InputDecoration(
-                                                                    hintText:
-                                                                        'Title...'),
-                                                          ),
-                                                          TextFormField(
-                                                            controller:
-                                                                descriptionTextController,
-                                                            maxLines: null,
-                                                            decoration:
-                                                                const InputDecoration(
-                                                                    hintText:
-                                                                        'Write your thoughts...'),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    )
-                                                  ],
-                                                ))
-                                          ],
-                                        ))
-                                  ],
-                                ),
-                              ),
-                            );
+                            return UpdateEntryDialog(
+                                element: element,
+                                bookCollectionReference:
+                                    bookCollectionReference);
                           });
                     },
                     icon: const Icon(Icons.edit_note)),
@@ -172,7 +51,7 @@ class InnerListView extends StatelessWidget {
                     onPressed: () {
                       Navigator.of(context).pop();
                       deleteDialogEntry(
-                          context, bookCollectionReference, element);
+                          context, () {}, bookCollectionReference, element);
                     })
               ],
             ),
