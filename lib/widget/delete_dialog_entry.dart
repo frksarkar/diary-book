@@ -5,6 +5,7 @@ import '../model/diary.dart';
 
 Future<dynamic> deleteDialogEntry(
     BuildContext context,
+    Function value,
     CollectionReference<Map<String, dynamic>> bookCollectionReference,
     Diary element) {
   return showDialog(
@@ -31,6 +32,7 @@ Future<dynamic> deleteDialogEntry(
                   .doc(element.id)
                   .delete()
                   .then((value) => Navigator.of(context).pop());
+              value(true);
             },
           )
         ],
