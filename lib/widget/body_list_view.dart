@@ -50,8 +50,8 @@ StreamBuilder<QuerySnapshot<Map<String, dynamic>>> bodyListView() {
                           IconButton(
                               icon: const Icon(Icons.delete_forever),
                               onPressed: () {
-                                deleteDialogEntry(
-                                    context, bookCollectionReference, element);
+                                deleteDialogEntry(context, () {},
+                                    bookCollectionReference, element);
                               })
                         ],
                       ),
