@@ -1,4 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker_web/image_picker_web.dart';
 
@@ -49,23 +51,47 @@ class _UpdateEntryDialogState extends State<UpdateEntryDialog> {
                   style: ElevatedButton.styleFrom(elevation: 4),
                   child: const Text('update'),
                   onPressed: () {
-                    if (titleTextController.text != widget.element.title &&
+                    final userIdRef =
+                        widget.bookCollectionReference.doc(widget.element.id);
+                    final fs = FirebaseStorage.instance.ref();
+                    DateTime time = DateTime.now();
+                    final path = '${time.millisecondsSinceEpoch}';
+
+                    if (titleTextController.text != widget.element.title ||
                         descriptionTextController.text !=
-                            widget.element.description) {
+                            widget.element.description ||
+                        _fileBytes != null) {
                       Future.delayed(
                         const Duration(milliseconds: 1500),
                         () {
                           Navigator.of(context).pop();
                         },
                       );
-                      widget.bookCollectionReference
-                          .doc(widget.element.id)
-                          .update({
+                      userIdRef.update({
                         'title': titleTextController.text,
                         'description': descriptionTextController.text
-                      }).then((value) => null);
-                    } else {
-                      print('false');
+                      });
+
+                      // image store in firebase
+                      final meteData =
+                          SettableMetadata(contentType: 'image/jpeg');
+                      fs
+                          .child(
+                              'images/$path${FirebaseAuth.instance.currentUser!.uid}')
+                          .putData(_fileBytes, meteData)
+                          .then((value) {
+                        value.ref.getDownloadURL().then((value) {
+                          userIdRef.update({'photo_url': value.toString()});
+                          return null;
+                        });
+                        return null;
+                      });
+                      // // Create a reference to the file to delete
+                      // final desertRef = fs.child(
+                      //     'images/1682425358381${FirebaseAuth.instance.currentUser!.uid}');
+
+                      // // Delete the file
+                      // desertRef.delete();
                     }
                   },
                 ),
