@@ -67,7 +67,7 @@ class _MainPageState extends State<MainPage> {
             ])
           ]),
       body: Row(children: [
-        left_calendar(context, selectedDate, addTaskDialogBox),
+        leftCalendar(context, selectedDate, addTaskDialogBox),
         Expanded(flex: 3, child: bodyListView())
       ]),
       floatingActionButton: FloatingActionButton(

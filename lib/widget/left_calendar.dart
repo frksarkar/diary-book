@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
-Expanded left_calendar(
-    BuildContext context, DateTime selectedDate, Null addTaskDialogBox()) {
+Expanded leftCalendar(
+    BuildContext context, DateTime selectedDate, Function() addTaskDialogBox) {
   return Expanded(
       child: Container(
           width: MediaQuery.of(context).size.height,

@@ -51,18 +51,18 @@ class LoginForm extends StatelessWidget {
           ),
         ),
         ElevatedButton(
-            style: ElevatedButton.styleFrom(textStyle: TextStyle(fontSize: 18)),
+            style: ElevatedButton.styleFrom(
+                textStyle: const TextStyle(fontSize: 18)),
             child: const Text('Login'),
             onPressed: () {
               if (_globalKey!.currentState!.validate()) {
-                print('all is good');
                 FirebaseAuth.instance
                     .signInWithEmailAndPassword(
                         email: _emailTextController.text,
                         password: _passwordTextController.text)
                     .then((value) {
-                  Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => MainPage()));
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => const MainPage()));
                 });
               }
             }),

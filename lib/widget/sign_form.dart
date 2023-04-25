@@ -59,7 +59,6 @@ class CreateAccount extends StatelessWidget {
             child: const Text('sign up'),
             onPressed: () {
               if (_globalKey!.currentState!.validate()) {
-                print('all is good');
                 FirebaseAuth.instance
                     .createUserWithEmailAndPassword(
                         email: _emailTextController.text,
