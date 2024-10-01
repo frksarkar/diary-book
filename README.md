@@ -30,4 +30,38 @@ To get started with the development or deployment of Diary Book, follow the inst
    ```bash
    git clone https://github.com/frksarkar/diary-book.git
    cd diary-book
+   ```
+2. Install the dependencies:
+   ```
+   flutter pub get
+   ```
+3. Run the app:
+   ```
+   flutter run
+   ```
+## Folder Structure
+   ```
+   diary-book/
+├── android/
+├── ios/
+├── lib/
+│   ├── models/            # Data models used in the app
+│   ├── screens/           # Main screens for diary entries, settings, etc.
+│   ├── widgets/           # Reusable widgets across the app
+│   └── main.dart          # Entry point of the app
+├── test/                  # Unit and widget tests
+└── pubspec.yaml           # Project dependencies
 
+   ```
+
+## Contributing
+
+Contributions are what make the open-source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated.**
+
+1. Fork the Project
+3. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+4. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+5. Push to the Branch (`git push origin feature/AmazingFeature`)
+6. Open a Pull Request
+
+## Contact
