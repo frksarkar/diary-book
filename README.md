@@ -11,7 +11,7 @@ A feature-rich, user-friendly diary app built using **Flutter** and **Dart**. Di
 - 🛠️ **Responsive Design**: Adapts to different screen sizes and devices seamlessly.
 
 ## Screenshots
-(You can add screenshots of your app here)
+(screenshots here)
 
 ## Getting Started
 
